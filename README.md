@@ -15,7 +15,7 @@ A Discord bot that sends check-in and check-out reminders to a specified channel
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/LyneQ/BeCode_Check-in.git
+    git clone https://github.com/LyneQ/Wilson-Reminder
     cd discord-reminder-bot
     ```
 
