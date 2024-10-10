@@ -9,7 +9,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.on('ready', () => {
 
     console.log(`Logged in as ${colors.yellow(client.user.tag)} !`);
-
+    
     sendReminder()
 
 });
@@ -24,8 +24,8 @@ const cronDetails = {
 
 const initializeAlert = (isCheckIn = true) => {
 
-    const alertMessage =  `hi @everyone, it's time to [check ${isCheckIn ? 'in' : 'out' }](${process.env.CHECKING_URL}) ! `
-    const alertMessageSkrike = `hi @everyone, time to ~~check ${isCheckIn ? 'in' : 'out' }~~ is over ! `
+    const alertMessage =  `🔔 @everyone You have **${ isCheckIn ? 15 : 30 } minutes** to check ${ isCheckIn ? 'in' : 'out' } ! Don't forget to mark your attendance before time runs out.`
+    const alertMessageSkrike = `⏳ @everyone Check-in is now closed.`
 
     client.guilds.fetch(process.env.GUILD_ID).then((guild) => {
         console.log(`Fetched guild ${guild.name}`);
@@ -38,7 +38,9 @@ const initializeAlert = (isCheckIn = true) => {
                     channel.messages.fetch(sentMessage.id).then((message) => {
                        message.edit({ content: alertMessageSkrike })
                     })
-                },  isCheckIn ? 9000000 : 18000000);
+                },  isCheckIn ? 900000 : 18000000);
+            // },  isCheckIn ? 3000 : 18000000);
+
 
             }).catch((err) => {
             console.log(`Error fetching channel ${err}`);
@@ -56,10 +58,12 @@ function sendReminder(channel, message) {
         cron.schedule(value, () => {
 
             switch (key) {
-                case 'morning_in' || 'afternoon_in':
+                case 'morning_in':
+                    case'afternoon_in':
                     initializeAlert(true)
                     break;
-                case 'morning_out'  || 'afternoon_out':
+                case 'morning_out':
+                    case'afternoon_out':
                     initializeAlert(false);
                     break;
                 default:
