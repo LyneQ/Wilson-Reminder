@@ -39,8 +39,6 @@ const initializeAlert = (isCheckIn = true) => {
                        message.edit({ content: alertMessageSkrike })
                     })
                 },  isCheckIn ? 900000 : 1800000);
-            // },  isCheckIn ? 3000 : 18000000);
-
 
             }).catch((err) => {
             console.log(`Error fetching channel ${err}`);
