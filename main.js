@@ -9,7 +9,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.on('ready', () => {
 
     console.log(`Logged in as ${colors.yellow(client.user.tag)} !`);
-    
+
     sendReminder()
 
 });
@@ -38,7 +38,7 @@ const initializeAlert = (isCheckIn = true) => {
                     channel.messages.fetch(sentMessage.id).then((message) => {
                        message.edit({ content: alertMessageSkrike })
                     })
-                },  isCheckIn ? 900000 : 18000000);
+                },  isCheckIn ? 900000 : 1800000);
             // },  isCheckIn ? 3000 : 18000000);
 
 
