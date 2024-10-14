@@ -18,7 +18,7 @@ const cronDetails = {
 };
 
 const initializeAlert = (isCheckIn = true) => {
-  const checkInMessage = `🔔 @everyone You have **${isCheckIn ? 15 : 30} minutes** to check ${isCheckIn ? "in" : "out"} ! Don't forget to mark your attendance before time runs out.`;
+  const checkInMessage = `🔔 @everyone You have **${isCheckIn ? 15 : 30} minutes** to ${isCheckIn ? `[check in](${process.env.CHECKING_URL})` : "check out"} ! Don't forget to mark your attendance before time runs out.`;
   const checkOutMessage = `⏳ @everyone Check-in is now closed.`;
   //   const checkInMessage = `🔔 member You have **${isCheckIn ? 15 : 30} minutes** to check ${isCheckIn ? "in" : "out"} ! Don't forget to mark your attendance before time runs out.`;
   //   const checkOutMessage = `⏳ member Check-in is now closed.`;
