@@ -33,7 +33,7 @@ A Discord bot that sends check-in and check-out reminders to a specified channel
     GUILD_ID=your_guild_id
     CHECKING_CHANNEL_ID=your_channel_id
     CHECKING_URL=your_checking_url
-    MENTION_ROLE_ID=
+    MENTION_ROLE_ID=id_of_the_role_to_ping
     ```
 
 2. Alternatively, you can use the provided `.env.example` file as a template:
