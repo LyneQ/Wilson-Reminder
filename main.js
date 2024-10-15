@@ -7,74 +7,74 @@ require("dotenv").config();
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.on("ready", () => {
-  console.log(`Logged in as ${colors.yellow(client.user.tag)} !`);
+    console.log(`Logged in as ${colors.yellow(client.user.tag)} !`);
 });
 
 const cronDetails = {
-  morning_in: "45 8 * * 1-5",
-  morning_out: "30 12 * * 1-5",
-  afternoon_in: "15 13 * * 1-5",
-  afternoon_out: "0 17 * * 1-5",
+    morning_in: "45 8 * * 1-5",
+    morning_out: "30 12 * * 1-5",
+    afternoon_in: "15 13 * * 1-5",
+    afternoon_out: "0 17 * * 1-5",
 };
 
 const initializeAlert = (isCheckIn = true) => {
-  const checkInMessage = `🔔 <@&${process.env.MENTION_ROLE_ID}> You have **${isCheckIn ? 15 : 30} minutes** to ${isCheckIn ? `[check in](${process.env.CHECKING_URL})` : "check out"} ! Don't forget to mark your attendance before time runs out.`;
-  const checkOutMessage = `⏳ <@&${process.env.MENTION_ROLE_ID}> Check-in is now closed.`;
-  //   const checkInMessage = `🔔 member You have **${isCheckIn ? 15 : 30} minutes** to check ${isCheckIn ? "in" : "out"} ! Don't forget to mark your attendance before time runs out.`;
-  //   const checkOutMessage = `⏳ member Check-in is now closed.`;
+    const checkInMessage = `🔔 <@&${process.env.MENTION_ROLE_ID}> You have **${isCheckIn ? 15 : 30} minutes** to ${isCheckIn ? `[check in](${process.env.CHECKING_URL})` : "check out"} ! Don't forget to mark your attendance before time runs out.`;
+    const checkOutMessage = `⏳ <@&${process.env.MENTION_ROLE_ID}> Check-${ isCheckIn ? 'in' : 'out' } is now closed.`;
+    //   const checkInMessage = `🔔 member You have **${isCheckIn ? 15 : 30} minutes** to check ${isCheckIn ? "in" : "out"} ! Don't forget to mark your attendance before time runs out.`;
+    //   const checkOutMessage = `⏳ member Check-in is now closed.`;
 
-  const timeOutDuration= {
-      in: 900000,
-      out: 1800000,
-      testing: 6000
-  }
+    const timeOutDuration= {
+        in: 900000,
+        out: 1800000,
+        testing: 6000
+    }
 
-  client.guilds.fetch(process.env.GUILD_ID).then((guild) => {
+    client.guilds.fetch(process.env.GUILD_ID).then((guild) => {
 
-    console.log(`Fetched guild ${guild.name}`);
+        console.log(`Fetched guild ${guild.name}`);
 
-    guild.channels
-      .fetch(process.env.CHECKING_CHANNEL_ID)
-      .then(async (channel) => {
-        console.log(`Fetched channel ${channel.name}`);
-        const sentMessage = await channel.send(checkInMessage);
+        guild.channels
+            .fetch(process.env.CHECKING_CHANNEL_ID)
+            .then(async (channel) => {
+                console.log(`Fetched channel ${channel.name}`);
+                const sentMessage = await channel.send(checkInMessage);
 
-        setTimeout(
-          () => {
-            channel.messages.fetch(sentMessage.id).then((message) => {
-              message.edit({ content: checkOutMessage });
+                setTimeout(
+                    () => {
+                        channel.messages.fetch(sentMessage.id).then((message) => {
+                            message.edit({ content: checkOutMessage });
+                        });
+                    }, isCheckIn ? timeOutDuration.in : timeOutDuration.out,);
+
+            })
+            .catch((err) => {
+                console.log(`Error fetching channel ${err}`);
             });
-          }, isCheckIn ? timeOutDuration.in : timeOutDuration.out,);
-
-      })
-      .catch((err) => {
-        console.log(`Error fetching channel ${err}`);
-      });
-  });
+    });
 };
 
 for (const [key, value] of Object.entries(cronDetails)) {
-  console.log(`Setting up ${key} cron job`);
+    console.log(`Setting up ${key} cron job`);
 
-  cron.schedule(value, () => {
-    switch (key) {
-      case "morning_in":
-      case "afternoon_in":
-          case "test_in":
-              console.log(`initializeAlert(true) ${key}`);
-              initializeAlert(true);
-        break;
-      case "morning_out":
-      case "afternoon_out":
-          case "test_out":
-              console.log(`initializeAlert(false) ${key}`);
-              initializeAlert(false);
-        break;
-      default:
-        console.log(`invalid value for key: ${key}`.red);
-    }
-    console.log(`Running ${key} cron job`);
-  });
+    cron.schedule(value, () => {
+        switch (key) {
+            case "morning_in":
+            case "afternoon_in":
+            case "test_in":
+                console.log(`initializeAlert(true) ${key}`);
+                initializeAlert(true);
+                break;
+            case "morning_out":
+            case "afternoon_out":
+            case "test_out":
+                console.log(`initializeAlert(false) ${key}`);
+                initializeAlert(false);
+                break;
+            default:
+                console.log(`invalid value for key: ${key}`.red);
+        }
+        console.log(`Running ${key} cron job`);
+    });
 }
 
 client.login(process.env.BOT_TOKEN);
