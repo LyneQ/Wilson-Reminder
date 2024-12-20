@@ -1,13 +1,12 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 const cron = require("node-cron");
-
 const colors = require("colors");
 require("dotenv").config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.on("ready", () => {
-  console.log(`Logged in as ${colors.yellow(client.user.tag)} !`);
+  console.info(`Logged in as ${colors.yellow(client.user.tag)} !`);
 });
 
 const cronDetails = {
@@ -18,7 +17,7 @@ const cronDetails = {
 };
 
 const initializeAlert = (isCheckIn = true) => {
-  const checkInMessage = `🔔 <@&${process.env.MENTION_ROLE_ID}> You have **${isCheckIn ? 15 : 30} minutes** to ${isCheckIn ? `[check in](${process.env.CHECKING_URL})` : "check out"} ! Don't forget to mark your attendance before time runs out.`;
+  const checkInMessage = `🔔 <@&${process.env.MENTION_ROLE_ID}> You have **${isCheckIn ? 15 : 30} minutes** to ${isCheckIn ? `[check in](${process.env.CHECKING_URL})` : "[check out](${process.env.CHECKING_URL})"} ! Don't forget to mark your attendance before time runs out.`;
   const checkOutMessage = `⏳ <@&${process.env.MENTION_ROLE_ID}> Check-${isCheckIn ? "in" : "out"} is now closed.`;
   const timeOutDuration = {
     in: 900000,
